@@ -39,6 +39,11 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 . . . f f f b b f f f . . . . . 
 `)
 })
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (LADY_BUG.isHittingTile(CollisionDirection.Bottom)) {
+        LADY_BUG.vy = -150
+    }
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     LADY_BUG.setImage(img`
 . . . . . . . . . . . . . . . . 
@@ -225,3 +230,11 @@ tiles.setTilemap(tiles.createTilemap(
             TileScale.Sixteen
         ))
 scene.cameraFollowSprite(LADY_BUG)
+LADY_BUG.ay = 300
+info.setLife(3)
+game.onUpdate(function () {
+    if (LADY_BUG.tileKindAt(TileDirection.Bottom, sprites.dungeon.hazardLava1)) {
+        LADY_BUG.setPosition(10, 0)
+        info.changeLifeBy(-1)
+    }
+})
