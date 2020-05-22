@@ -41,6 +41,7 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     tiles.placeOnRandomTile(fresi, myTiles.tile0)
+    tiles.placeOnRandomTile(tarti, myTiles.tile0)
     info.changeScoreBy(1)
 })
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -81,6 +82,7 @@ info.onCountdownEnd(function () {
         game.over(false)
     }
 })
+let tarti: Sprite = null
 let fresi: Sprite = null
 let LADY_BUG: Sprite = null
 scene.setBackgroundImage(img`
@@ -223,6 +225,7 @@ f b b b e 1 f 4 4 f 1 e b b b f
 . . . f f 1 d 1 d 1 1 f f . . . 
 . . . . . f f f b b f . . . . . 
 `, SpriteKind.Player)
+LADY_BUG.setPosition(61, 12)
 controller.moveSprite(LADY_BUG, 100, 0)
 tiles.setTilemap(tiles.createTilemap(
             hex`32001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d000000000000000000000000000000000d0d000000000d0d000000000000000d0d0000000000000000000000000d0000000d00000d0d00000d060d0000000d0d0d0600000000000000000000000000000000000000000000000d00000d0d0d0d0000000000000000000000000000000000000000000000000000000000000000000000000000000d00000000000000000000000d0000000000000d0d0000000d000000000000000000000d0d000000000d0d0d060606060d0d0d00000d000000000000000d00000d0000000000000000000d0d000000000000000000000000000000000000000000000000000000000000000000000d0000000d0d0606000000000000000d000d0d0000000000000000000000000000000000000000000000000000000000000000000000000000000d00000d0000000d00000000000000000d0d0606060d0d00000000000000000000000d0d0d0606060d0d0d000000000000000d0d0d000000000d0000000d00000000000000000000000000000000000000000000000000000000000000000000000000000000000d06060d0d0606060d0d0d0d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d0d0d0d00000d0d0d0000000000000000000d0d0000000d0d0d0d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0a0a000a0a0a0a0a0000000a0a060a00000000000a0a0a0a0a0a0a0a0a0a000a0a0a0a0a0a0a0a0a00000b0b0a0a0a0a060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d0000000000000d0d00000000000000000000000000000000000000000000000000000000000000060d06060d06060d0606060d0606060606060606060d0606060d0606060d0606060606060606060606060606060606060606`,
@@ -268,12 +271,39 @@ e e e e 2 e 2 2 e e e c . . . .
 e e e 2 e e c e c c c . . . . . 
 . c c c c c c c . . . . . . . . 
 `, SpriteKind.Food)
+tarti = sprites.create(img`
+. . . . . . . . . . . 6 6 6 6 6 
+. . . . . . . . . 6 6 7 7 7 7 8 
+. . . . . . 8 8 8 7 7 8 8 6 8 8 
+. . e e e e c 6 6 8 8 . 8 7 8 . 
+. e 2 5 4 2 e c 8 . . . 6 7 8 . 
+e 2 4 2 2 2 2 2 c . . . 6 7 8 . 
+e 2 2 2 2 2 2 2 c . . . 8 6 8 . 
+e 2 e e 2 2 2 2 e e e e c 6 8 . 
+c 2 e e 2 2 2 2 e 2 5 4 2 c 8 . 
+. c 2 e e e 2 e 2 4 2 2 2 2 c . 
+. . c 2 2 2 e e 2 2 2 2 2 2 2 e 
+. . . e c c e c 2 2 2 2 2 2 2 e 
+. . . . . . . c 2 e e 2 2 e 2 c 
+. . . . . . . c e e e e e e 2 c 
+. . . . . . . . c e 2 2 2 2 c . 
+. . . . . . . . . c c c c c . . 
+`, SpriteKind.Food)
 tiles.placeOnRandomTile(fresi, myTiles.tile0)
+tiles.placeOnRandomTile(tarti, myTiles.tile0)
 info.setScore(0)
 info.startCountdown(60)
 game.onUpdate(function () {
     if (LADY_BUG.tileKindAt(TileDirection.Bottom, sprites.dungeon.hazardLava1)) {
-        LADY_BUG.setPosition(10, 0)
+        LADY_BUG.setPosition(61, 12)
         info.changeLifeBy(-1)
+    }
+})
+forever(function () {
+    if (fresi.isHittingTile(CollisionDirection.Bottom)) {
+        tiles.placeOnRandomTile(fresi, myTiles.tile0)
+    }
+    if (tarti.isHittingTile(CollisionDirection.Bottom)) {
+        tiles.placeOnRandomTile(tarti, myTiles.tile0)
     }
 })
